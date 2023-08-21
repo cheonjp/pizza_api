@@ -1,8 +1,9 @@
 import express from "express"
-import { postMenu } from "../controller/controller_menu.js"
+import { getMenus, postMenu } from "../controller/controller_menu.js"
 
 const router = express.Router()
 
 router.post("/post", postMenu)
+router.get("/get_all", getMenus)
 
 export default router

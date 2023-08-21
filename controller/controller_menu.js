@@ -9,3 +9,12 @@ export const postMenu = async (req,res)=>{
         res.status(500).json(error)
     }
 }
+
+export const getMenus = async (req,res)=>{
+    try {
+        const menus = await Menu.find({})
+        res.status(200).json(menus)
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
