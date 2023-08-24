@@ -22,6 +22,9 @@ const User = new Schema({
         type:String,
         required:true
     },
+    img:{
+        type:String
+    }
     
 },{
     timestamps:true

@@ -7,6 +7,8 @@ import menuRoute from "./route/route_menu.js"
 
 import cookieParser from "cookie-parser"
 import jwt from "jsonwebtoken"
+import uploads from "./middleware/multer.js"
+import { register } from "./controller/controller_user.js"
 
 const app = express()
 app.use(cors())
@@ -25,6 +27,21 @@ try {
 
 app.use("/api/user", userRoute)
 app.use("/api/menu", menuRoute)
+
+export let imageName
+app.post("/api/image/upload",uploads.single("profile"),(req,res,next)=>{
+    try {
+        if(req.file){
+             imageName = req.file.filename
+          res.status(200).json(imageName)
+        }else if(!req.file){
+          res.status(400).json("profile image is not found")
+        }  
+        
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
 
 app.listen(process.env.PORT, ()=>{
     console.log('App is listening on port: '+ process.env.PORT)

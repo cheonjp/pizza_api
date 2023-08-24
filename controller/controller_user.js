@@ -1,26 +1,36 @@
+import { imageName } from "../index.js"
 import createError from "../middleware/createError.js"
+import uploadImage from "../middleware/multer.js"
+import uploads from "../middleware/multer.js"
 import User from "../model/User.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
+
 // register
-export const register = async (req, res, next) => {
+export const register = async (req, res,next) => {
     try {
         const user = await new User(req.body)
         const existedEmail = await User.findOne({email:req.body.email})
         if(existedEmail){
-           return res.status(401).json("This email is already registered. Please use other email.")
+                return res.status(401).json("This email is already registered. Please use other email.")
+            }
+            console.log(imageName)
+            const password = user.password
+            const salt = 10
+            const hashedPassword = await bcrypt.hashSync(password,salt)
+            user.password = hashedPassword
+            if(imageName && req.body.img){
+                user.img = imageName
+            }
+             
+            await user.save()
+            res.status(201).json(user)
+        } catch (error) {
+            res.status(500).json(error)
         }
-        const password = user.password
-        const salt = 10
-        const hashedPassword = bcrypt.hashSync(password,salt)
-        user.password = hashedPassword
-
-        await user.save()
-        res.status(201).json("You are registered")
-    } catch (error) {
-    }
 }
+
 
 export const verify = (req,res,next)=>{
     const authHeader = req.headers.authorization
