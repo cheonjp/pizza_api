@@ -15,6 +15,7 @@ app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 dotenv.config()
+app.use(express.static('public'))
 
 try {
     await mongoose.connect(process.env.DB_URL)

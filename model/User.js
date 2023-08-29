@@ -24,7 +24,13 @@ const User = new Schema({
     },
     img:{
         type:String
-    }
+    },
+    city:{
+        type:String
+    },
+    postCode:{
+        type:String
+    },
     
 },{
     timestamps:true

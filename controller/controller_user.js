@@ -25,7 +25,7 @@ export const register = async (req, res,next) => {
             }
              
             await user.save()
-            res.status(201).json(user)
+            res.status(201).json("Welcome to Monster")
         } catch (error) {
             res.status(500).json(error)
         }
