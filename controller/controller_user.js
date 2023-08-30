@@ -20,6 +20,7 @@ export const register = async (req, res,next) => {
             const salt = 10
             const hashedPassword = await bcrypt.hashSync(password,salt)
             user.password = hashedPassword
+            
             if(imageName && req.body.img){
                 user.img = imageName
             }
