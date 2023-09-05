@@ -49,6 +49,7 @@ export const verify = (req,res,next)=>{
     }
 }
 
+// login
 export const login = async(req,res,next)=>{
     try {
         const user = await User.findOne({email:req.body.email})
@@ -62,9 +63,10 @@ export const login = async(req,res,next)=>{
         if(user){
             const email = user._doc.email
             const userId = user._doc._id.toString()
-            const token = jwt.sign({email:email, userId:userId},process.env.JWT_SECRET_KEY,{expiresIn:"30s"})
+            const token = jwt.sign({email:email, userId:userId},process.env.JWT_SECRET_KEY,{expiresIn:"1day"})
             user._doc.accessToken = token
             const {password,...others}=user._doc
+            req.headers.authorization = token
             res.status(200).json(others)
         }
     } catch (error) {
@@ -74,12 +76,23 @@ export const login = async(req,res,next)=>{
     
 }
 
+// get a user
+export const getUser = async(req,res)=>{
+    try {
+        const userId = req.params.id
+        const user = await User.findById(userId)
+        res.status(200).json(user)
+    } catch (error) {
+        res.status(500).json(error)
+    }
+    
+}
+
+// delete user
 export const deleteUser = async(req,res)=>{
-    const userId = req.user.userId
     try {
         const targetUser = await User.findByIdAndDelete(userId)
         if(!targetUser){
-            console.log(req.headers.authorization)
             return res.status(404).json("User can not be found")
         }
         res.status(200).json("user is deleted")
@@ -87,6 +100,31 @@ export const deleteUser = async(req,res)=>{
         res.status(500).json(error)
     }
 }
+
+// update user
+export const updateUser = async (req,res)=>{
+    try {
+        console.log(req.headers.authorization)
+        const {id} = req.params
+        const hashedPassword = bcrypt.hashSync(req.body.password,10)
+        const user = await User.findByIdAndUpdate(id, ({
+            username:req.body.username,
+            email:req.body.email,
+            phone:req.body.phone,
+            city:req.body.city,
+            postCode:req.body.postCode,
+            password:req.body.password
+        }),
+        {new:true})
+        res.status(200).json(user)
+        
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
+
+
+
 
 
 
