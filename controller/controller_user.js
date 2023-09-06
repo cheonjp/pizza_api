@@ -63,7 +63,7 @@ export const login = async(req,res,next)=>{
         if(user){
             const email = user._doc.email
             const userId = user._doc._id.toString()
-            const token = jwt.sign({email:email, userId:userId},process.env.JWT_SECRET_KEY,{expiresIn:"1day"})
+            const token = jwt.sign({email:email, userId:userId},process.env.JWT_SECRET_KEY,{expiresIn:"1 days"})
             user._doc.accessToken = token
             const {password,...others}=user._doc
             req.headers.authorization = token
@@ -104,24 +104,68 @@ export const deleteUser = async(req,res)=>{
 // update user
 export const updateUser = async (req,res)=>{
     try {
-        console.log(req.headers.authorization)
         const {id} = req.params
         const hashedPassword = bcrypt.hashSync(req.body.password,10)
+        console.log(req.body.password)
         const user = await User.findByIdAndUpdate(id, ({
             username:req.body.username,
             email:req.body.email,
             phone:req.body.phone,
             city:req.body.city,
             postCode:req.body.postCode,
-            password:req.body.password
+            password:req.body.password,
+            img:req.body.img,
         }),
         {new:true})
-        res.status(200).json(user)
+
+        const {password,...other}=user._doc
+        return res.status(200).json(other)
         
     } catch (error) {
         res.status(500).json(error)
     }
 }
+// update user with password
+export const updateUserWithPassword = async (req,res)=>{
+    try {
+        const {id} = req.params
+        const hashedPassword = bcrypt.hashSync(req.body.password,10)
+        console.log(req.body.password)
+        const user = await User.findByIdAndUpdate(id, ({
+            username:req.body.username,
+            email:req.body.email,
+            phone:req.body.phone,
+            city:req.body.city,
+            postCode:req.body.postCode,
+            password:hashedPassword,
+            img:req.body.img,
+        }),
+        {new:true})
+
+        const {password,...other}=user._doc
+        return res.status(200).json(other)
+        
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
+
+// confirmPassword
+export const confirmPassword = async(req,res)=>{
+    try {
+        const {id}=req.params
+        const user = await User.findById(id)
+        const  userPassword =await bcrypt.compareSync(req.body.password, user.password)
+        if(!userPassword){
+            return res.status(401).json("password is not matched")
+        }else if(userPassword){
+            res.status(200).json("Right")
+        }
+    } catch (error) {
+        return console.log(error)
+    }
+}
+
 
 
 
