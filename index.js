@@ -4,6 +4,7 @@ import mongoose from "mongoose"
 import dotenv from "dotenv"
 import userRoute from "./route/route_user.js"
 import menuRoute from "./route/route_menu.js"
+import checkoutRoute from "./route/route_purchasingItem.js"
 
 import cookieParser from "cookie-parser"
 import jwt from "jsonwebtoken"
@@ -28,6 +29,7 @@ try {
 
 app.use("/api/user", userRoute)
 app.use("/api/menu", menuRoute)
+app.use("/api/checkout", checkoutRoute)
 
 export let imageName
 app.post("/api/image/upload",uploads.single("profile"),(req,res,next)=>{

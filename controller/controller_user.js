@@ -15,7 +15,6 @@ export const register = async (req, res,next) => {
         if(existedEmail){
                 return res.status(401).json("This email is already registered. Please use other email.")
             }
-            console.log(imageName)
             const password = user.password
             const salt = 10
             const hashedPassword = await bcrypt.hashSync(password,salt)

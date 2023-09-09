@@ -1,0 +1,10 @@
+import express from "express"
+import { getUserItems, singleItem } from "../controller/controller_purchasingItem.js"
+
+const router = express.Router()
+// post single item for cart
+router.post("/cart/:id",singleItem)
+
+// find all items in the cart
+router.get("/cart/all-items/:id",getUserItems)
+export default router
