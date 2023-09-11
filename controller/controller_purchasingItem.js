@@ -31,3 +31,24 @@ export const getUserItems  = async (req,res)=>{
     }
 }
 
+// delete single item
+export const deleteItem = async (req,res)=>{
+    try {
+        const itemId = req.body.id
+        await PurchasingItem.findByIdAndDelete(itemId)
+        return res.status(200).json("item is deleted")
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
+
+export const deleteAllItems = async(req,res)=>{
+    try {
+        const userId = req.body.userId
+        await PurchasingItem.deleteMany({userId:userId})
+        return res.status(200).json("all cart Items are deleted")
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
+
