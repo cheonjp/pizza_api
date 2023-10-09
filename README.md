@@ -1,7 +1,7 @@
 피자레스토랑 백엔드 구현
 
 Node.js, MongoDB 공부 동기: 프론트엔드에서 데이트를 Fetching 하는 동작에서 어려운 부분이 많았습니다. 예를들어 Method를 입력하고 Header를 입력하는 등, 어려웠던 부분이 많아 API 작동 원리를 이해하고 싶어
-백엔드 영역 공부를 시작하게 되었습니다.
+백엔드 영역 공부를 시작하게 되었습니다. <br/>
 
 . 사용한 Dependency : Nodemon, express.js, dotenv, bcrypt, jwt, mongoose, multer 등
 . 프로젝트 기간 : 약 50일
